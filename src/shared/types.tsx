@@ -5,7 +5,9 @@ export interface IGridDimension {
 
 export type GridType = number[][] | [];
 
-export enum BtnStartLabel {
+export enum BtnLabel {
   STOP = "STOP",
   START = "START",
+  RESET = "RESET",
+  RANDOM = "RANDOM",
 }

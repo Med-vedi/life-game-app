@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
-import { BtnStartLabel, GridType, IGridDimension } from "../../shared/types";
-
+import { BtnLabel, GridType, IGridDimension } from "../../shared/types";
 import "./style.css";
-
 import cn from "classnames";
-
 import { createEmptyGridArr, createRandomGridArr } from "../../shared/utils";
 
 const GridComponent = ({ rows, cols }: IGridDimension) => {
@@ -13,88 +10,86 @@ const GridComponent = ({ rows, cols }: IGridDimension) => {
   // STATE
   const [aliveCells, setAliveCells] = useState<number>(0);
   const [isLiveActive, setLiveIsAlive] = useState<boolean>(false);
+  const [isRandomMode, setIsRandomMode] = useState<boolean>(false);
+  const [genCounter, setGenCounter] = useState<number>(0);
   const [grid, setGrid] = useState<GridType>(emptyGrid);
-  const [generation, setGeneration] = useState<number>(0);
-  const [randomMode, setRandomMode] = useState<boolean>(false);
 
+  // RERENDER CONTROL
   useEffect(() => {
     let interval: ReturnType<typeof setTimeout>;
+
     if (isLiveActive) {
       interval = setInterval(() => {
         startSimulation();
-        setGeneration((prev) => (prev += 1));
-        !aliveCells && !randomMode && handleFinishGame();
+        setGenCounter((prev) => (prev += 1));
+        !aliveCells && !isRandomMode && handleFinishGame();
       }, 200);
     }
+
     return () => {
       clearInterval(interval);
     };
   });
 
-  const onCellClick = (x: number, y: number) => {
+  const onCellClick = (x: number, y: number): void => {
     // deep clone of actual grid
-    const newGrid = grid.map((cols) => [...cols]);
+    const newGrid = grid.map((cols) => [...cols]); // cell toggle
 
-    // cell toggle
     if (newGrid[x][y]) {
       newGrid[x][y] = 0;
       setAliveCells((prev) => (prev -= 1));
     } else {
       newGrid[x][y] = 1;
       setAliveCells((prev) => (prev += 1));
-    }
+    } // update the grid
 
-    // update the grid
     return setGrid(newGrid);
   };
 
   const findAliveNeighbours = (x: number, y: number): number => {
     let sum = 0;
+
     for (let i = -1; i < 2; i++) {
       for (let j = -1; j < 2; j++) {
         // backmail the grid size limits
         let col = (x + i + cols) % cols;
         let row = (y + j + rows) % rows;
-
         sum += grid[col][row];
       }
     }
+
     sum -= grid[x][y];
     return sum;
   };
 
   const handleFinishGame = () => {
     setLiveIsAlive(false);
-    clearInterval();
-  };
+    return clearInterval();
+  }; // BUTTONS ACTIONS
 
-  // BUTTONS ACTIONS
-  const startSimulation = () => {
+  const startSimulation = (): void => {
     // update counter and btn condition
     setAliveCells(0);
-    setRandomMode(false);
+    setIsRandomMode(false); // new grid state
 
-    // new grid state
-    let nextGrid = createEmptyGridArr(rows, cols);
+    let nextGrid = createEmptyGridArr(rows, cols); // verify by 3x3 square
 
-    // verify by 3x3 square
     for (let i = 0; i < cols; i++) {
       for (let j = 0; j < rows; j++) {
-        let neighbours = findAliveNeighbours(i, j);
-        // current cell
+        let neighbours = findAliveNeighbours(i, j); // current cell
+
         let curr = grid[i][j];
 
         if (curr) {
           setAliveCells((prev) => prev + curr);
         }
-
         /*
           Game rules in action:
         */
         // Any dead cell with three live neighbours becomes a live cell.
+
         if (!curr && neighbours === 3) {
-          nextGrid[i][j] = 1;
-          // Any live cell with two or three live neighbours survives.
+          nextGrid[i][j] = 1; // Any live cell with two or three live neighbours survives.
         } else if (curr && (neighbours === 2 || neighbours === 3)) {
           nextGrid[i][j] = 1;
         } else {
@@ -102,19 +97,19 @@ const GridComponent = ({ rows, cols }: IGridDimension) => {
           nextGrid[i][j] = 0;
         }
       }
-    }
-    // updated grid state
-    setGrid(nextGrid);
+    } // updated grid state
+
+    return setGrid(nextGrid);
   };
 
   const onGenerateRandomLifeClick = () => {
-    setRandomMode(true);
+    setIsRandomMode(true);
     setGrid(createRandomGridArr(rows, cols));
   };
 
   const onResetClick = () => {
     handleFinishGame();
-    setGeneration(0);
+    setGenCounter(0);
     setGrid(emptyGrid);
     setAliveCells(0);
   };
@@ -122,8 +117,8 @@ const GridComponent = ({ rows, cols }: IGridDimension) => {
   return (
     <div className="gridpage">
       <div className="gridpage__header">
-        <h2>Generation: {generation}</h2>
-        <h2>Population: {randomMode ? "Random" : aliveCells}</h2>
+        <h2>Generation: {genCounter}</h2>
+        <h2>Population: {isRandomMode ? "Random" : aliveCells}</h2>
       </div>
 
       <div
@@ -149,19 +144,19 @@ const GridComponent = ({ rows, cols }: IGridDimension) => {
 
       <div className="gridpage__footer">
         <button className="reset" onClick={onResetClick}>
-          RESET
+          {BtnLabel.RESET}
         </button>
         <button
           className={cn(isLiveActive ? "stop" : "start")}
-          disabled={!aliveCells && !randomMode}
+          disabled={!aliveCells && !isRandomMode}
           onClick={() => {
             setLiveIsAlive(!isLiveActive);
           }}
         >
-          {isLiveActive ? BtnStartLabel.STOP : BtnStartLabel.START}
+          {isLiveActive ? BtnLabel.STOP : BtnLabel.START}
         </button>
         <button className="random" onClick={onGenerateRandomLifeClick}>
-          RANDOM
+          {BtnLabel.RANDOM}
         </button>
       </div>
     </div>

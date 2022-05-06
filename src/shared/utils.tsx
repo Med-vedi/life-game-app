@@ -1,4 +1,4 @@
-export function createEmptyGridArr(cols: number, rows: number) {
+export function createEmptyGridArr(cols: number, rows: number): number[][] {
   const arr = [];
   for (let i = 0; i < cols; i++) {
     arr[i] = new Array(cols);
@@ -8,7 +8,7 @@ export function createEmptyGridArr(cols: number, rows: number) {
   }
   return arr;
 }
-export function createRandomGridArr(cols: number, rows: number) {
+export function createRandomGridArr(cols: number, rows: number): number[][] {
   const arr = [];
   for (let i = 0; i < cols; i++) {
     arr[i] = new Array(cols);
