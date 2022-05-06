@@ -2,12 +2,14 @@ import { configureStore } from "@reduxjs/toolkit";
 import counterReducer from "./counterSlice";
 import gridSizeReducer from "./gridSizeSlice";
 import gameControlReducer from "./gameControlSlice";
+import gridReducer from "./gridSlice";
 
 const store = configureStore({
   reducer: {
     counter: counterReducer,
     gridSize: gridSizeReducer,
     gameControl: gameControlReducer,
+    grid: gridReducer,
   },
 });
 

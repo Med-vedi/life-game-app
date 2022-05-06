@@ -16,6 +16,7 @@ import {
 import { GridType } from "../../shared/types";
 import { createEmptyGridArr, createRandomGridArr } from "../../shared/utils";
 import { GameStatus, GridMode } from "../../store/gameControlSlice";
+import { createEmptyGrid, createRandomGrid } from "../../store/gridSlice";
 
 const GridComponent: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -28,6 +29,7 @@ const GridComponent: React.FC = () => {
 
   const gameIsActive = gameStatus === GameStatus.START;
   const emptyGrid = createEmptyGridArr(rows, cols);
+
   // STATE
   const [grid, setGrid] = useState<GridType>(emptyGrid);
 
@@ -46,8 +48,11 @@ const GridComponent: React.FC = () => {
     };
   });
 
+  // RERENDER CONTROL
+  // control clicked button and grid mode
   useEffect(() => {
     if (gridMode === GridMode.RANDOM) {
+      dispatch(createRandomGrid({ cols: 30, rows: 30 }));
       return setGrid(createRandomGridArr(rows, cols));
     }
     if (gridMode === GridMode.EMPTY) {
