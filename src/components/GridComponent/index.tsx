@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { BtnLabel, GridType, IGridDimension } from "../../shared/types";
-import "./style.css";
 import cn from "classnames";
 import { createEmptyGridArr, createRandomGridArr } from "../../shared/utils";
 

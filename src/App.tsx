@@ -1,5 +1,6 @@
 import GridComponent from "./components/GridComponent";
 
+import "./style.css";
 const App = () => {
   return (
     <div>
