@@ -1,10 +1,15 @@
+import Footer from "./components/Footer";
 import GridComponent from "./components/GridComponent";
+import Header from "./components/Header";
 
 import "./style.css";
-const App = () => {
+
+const App: React.FC = () => {
   return (
-    <div>
-      <GridComponent rows={30} cols={30} />
+    <div className="gridpage">
+      <Header />
+      <GridComponent />
+      <Footer />
     </div>
   );
 };
