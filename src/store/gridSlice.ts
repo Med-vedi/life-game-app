@@ -6,6 +6,14 @@ type EmptyGrid = {
   rows: number;
   cols: number;
 };
+type UpdateGrid = {
+  grid: number[][];
+  x?: number;
+  y?: number;
+  rows?: number;
+  cols?: number;
+};
+
 type Grid = {
   rows: number;
   cols: number;
@@ -16,6 +24,7 @@ const initialState: EmptyGrid = {
   rows: 30,
   cols: 30,
 };
+
 const gridSlice = createSlice({
   name: "grid",
   initialState,
@@ -28,6 +37,14 @@ const gridSlice = createSlice({
         action.payload.cols,
         action.payload.rows
       );
+    },
+    updateGrid(state, action: PayloadAction<UpdateGrid>) {
+      let nextGrid = createEmptyGridArr(
+        action.payload.rows || 30,
+        action.payload.cols || 30
+      );
+
+      state.grid = nextGrid;
     },
   },
 });

@@ -10,6 +10,7 @@ import {
   startGame,
   stopGame,
 } from "../../store/gameControlSlice";
+import { createEmptyGrid, createRandomGrid } from "../../store/gridSlice";
 
 const Footer: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -34,12 +35,14 @@ const Footer: React.FC = () => {
   };
 
   const onRandomClick = () => {
+    dispatch(createRandomGrid({ rows: 30, cols: 30 }));
     dispatch(
       randomGrid({ gameStatus: GameStatus.STOP, gridMode: GridMode.RANDOM })
     );
   };
 
   const onResetClick = () => {
+    dispatch(createEmptyGrid({ rows: 30, cols: 30 }));
     dispatch(
       resetGrid({ gameStatus: GameStatus.STOP, gridMode: GridMode.EMPTY })
     );

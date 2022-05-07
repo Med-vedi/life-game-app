@@ -16,7 +16,7 @@ import {
 import { GridType } from "../../shared/types";
 import { createEmptyGridArr, createRandomGridArr } from "../../shared/utils";
 import { GameStatus, GridMode } from "../../store/gameControlSlice";
-import { createEmptyGrid, createRandomGrid } from "../../store/gridSlice";
+import { createRandomGrid } from "../../store/gridSlice";
 
 const GridComponent: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -107,10 +107,9 @@ const GridComponent: React.FC = () => {
       for (let j = 0; j < rows; j++) {
         let neighbours = findAliveNeighbours(i, j);
 
-        // current cell
-        let curr = grid[i][j];
+        let currentCell = grid[i][j];
 
-        if (curr) {
+        if (currentCell) {
           dispatch(increasePopulation());
         }
         /*
@@ -118,10 +117,10 @@ const GridComponent: React.FC = () => {
         */
         // Any dead cell with three live neighbours becomes a live cell.
 
-        if (!curr && neighbours === 3) {
+        if (!currentCell && neighbours === 3) {
           nextGrid[i][j] = 1;
           // Any live cell with two or three live neighbours survives.
-        } else if (curr && (neighbours === 2 || neighbours === 3)) {
+        } else if (currentCell && (neighbours === 2 || neighbours === 3)) {
           nextGrid[i][j] = 1;
         } else {
           // All other live cells die in the next generation. Similarly, all other dead cells stay dead.
