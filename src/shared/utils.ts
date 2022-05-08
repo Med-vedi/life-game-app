@@ -1,8 +1,8 @@
 import { GridSize } from "./types";
 
 interface FindNeighbours {
-  x: number;
-  y: number;
+  rowIdx: number;
+  colIdx: number;
   cols: number;
   rows: number;
   grid: number[][];
@@ -35,8 +35,8 @@ export function createRandomGridArr({ cols, rows }: GridSize): number[][] {
 }
 
 export const findAliveNeighbours = ({
-  x,
-  y,
+  rowIdx,
+  colIdx,
   cols,
   rows,
   grid,
@@ -45,13 +45,13 @@ export const findAliveNeighbours = ({
   for (let i = -1; i < 2; i++) {
     for (let j = -1; j < 2; j++) {
       // backmail the grid size limits
-      let col = (x + i + cols) % cols;
-      let row = (y + j + rows) % rows;
+      let row = (rowIdx + i + rows) % rows;
+      let col = (colIdx + j + cols) % cols;
 
-      sum += grid[col][row];
+      sum += grid[row][col];
     }
   }
-  sum -= grid[x][y];
+  sum -= grid[rowIdx][colIdx];
   return sum;
 };
 export const increasePopulation = ({

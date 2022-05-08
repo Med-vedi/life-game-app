@@ -6,6 +6,7 @@ import { createEmptyGrid } from "../../store/gridSlice";
 import { useAppDispatch, useAppSelector } from "../../hook";
 import { GameStatus, GridMode } from "../../shared/types";
 import { startGame } from "../../store/gameControlSlice";
+import { BtnLabel } from "../../shared/constants";
 
 const GridSize: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -19,19 +20,25 @@ const GridSize: React.FC = () => {
 
   const onWidthChange = (value: number) => {
     setWidth(value);
-    dispatch(
-      startGame({ gameStatus: GameStatus.STOP, gridMode: GridMode.EMPTY })
-    );
-    dispatch(createEmptyGrid({ cols: value, rows }));
   };
 
   const onHeightChange = (value: number) => {
     setHeight(value);
+  };
+
+  const onConfirmClick = () => {
+    if (height > width) {
+      // TOFIX: temporary blocked
+      setWidth(height);
+      return setHeight(width);
+    }
+
     dispatch(
       startGame({ gameStatus: GameStatus.STOP, gridMode: GridMode.EMPTY })
     );
-    dispatch(createEmptyGrid({ cols, rows: value }));
+    dispatch(createEmptyGrid({ cols: width, rows: height }));
   };
+
   return (
     <div className="gridpage__gridsize">
       H:{" "}
@@ -48,6 +55,9 @@ const GridSize: React.FC = () => {
         type="number"
         className="gridpage__gridsize__input"
       />
+      <button className="ok-btn" onClick={onConfirmClick}>
+        {BtnLabel.OK}
+      </button>
     </div>
   );
 };

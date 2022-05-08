@@ -8,9 +8,9 @@ import {
 } from "../shared/utils";
 
 const initialState: EmptyGrid = {
-  grid: createEmptyGridArr({ cols: 30, rows: 30 }),
-  cols: 30,
-  rows: 30,
+  grid: createEmptyGridArr({ cols: 8, rows: 4 }),
+  cols: 8,
+  rows: 4,
   generation: 0,
   population: 0,
 };
@@ -55,27 +55,29 @@ const gridSlice = createSlice({
 
       let nextGrid = createEmptyGridArr({ cols, rows });
 
-      for (let x = 0; x < cols; x++) {
-        for (let y = 0; y < rows; y++) {
+      for (let rowIdx = 0; rowIdx < rows; rowIdx++) {
+        for (let colIdx = 0; colIdx < cols; colIdx++) {
           // search 3x3 from utils.ts
-
-          let neighbours = findAliveNeighbours({ x, y, cols, rows, grid });
-
-          let currentCell = grid[x][y];
-
+          let neighbours = findAliveNeighbours({
+            rowIdx,
+            colIdx,
+            cols,
+            rows,
+            grid,
+          });
+          let currentCell = grid[rowIdx][colIdx];
           /*
           Game rules in action:
           */
           // Any dead cell with three live neighbours becomes a live cell.
-
           if (!currentCell && neighbours === 3) {
-            nextGrid[x][y] = 1;
+            nextGrid[rowIdx][colIdx] = 1;
             // Any live cell with two or three live neighbours survives.
           } else if (currentCell && (neighbours === 2 || neighbours === 3)) {
-            nextGrid[x][y] = 1;
+            nextGrid[rowIdx][colIdx] = 1;
           } else {
             // All other live cells die in the next generation. Similarly, all other dead cells stay dead.
-            nextGrid[x][y] = 0;
+            nextGrid[rowIdx][colIdx] = 0;
           }
         }
       }

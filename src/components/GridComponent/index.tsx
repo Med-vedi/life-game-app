@@ -44,21 +44,6 @@ const GridComponent: React.FC = () => {
   };
 
   return (
-    // <div className="gridpage__grid">
-    //   {grid.map((cols: number[], idx) => (
-    //     <div key={`${cols}-${idx}`} className="gridpage__grid__cols">
-    //       {cols.map((_, k: number) => {
-    //         return (
-    //           <div
-    //             onClick={() => onCellClick(idx, k)}
-    //             key={`${idx}-${k}`}
-    //             className={cn("cell", grid[idx][k] ? "filled" : null)}
-    //           />
-    //         );
-    //       })}
-    //     </div>
-    //   ))}
-    // </div>
     <div
       className="gridpage__grid"
       style={{

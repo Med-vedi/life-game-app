@@ -31,11 +31,13 @@ h2 {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-bottom: 1rem;
 }
 
 .gridpage__gridsize>input {
     max-width: 50px;
     margin: 0 20px;
+    cursor: pointer;
 }
 
 .gridpage__grid {
@@ -57,7 +59,7 @@ h2 {
 }
 
 .filled {
-    background-color: pink;
+    background-color: #28a745;
 }
 
 
@@ -81,6 +83,10 @@ button {
     padding: 0 10px;
     width: 220px;
 
+}
+
+.ok-btn {
+    max-width: 60px;
 }
 
 
@@ -118,7 +124,8 @@ button.random {
     border-color: #ffc107;
 }
 
-button.next {
+button.next,
+.ok-btn {
     color: #a9a7a7;
     border-color: #a9a7a7;
 }
@@ -144,7 +151,8 @@ button.random:hover {
     background-color: #ffc107;
 }
 
-button.next:hover {
+button.next:hover,
+.ok-btn:hover {
     background-color: #a9a7a7;
 }
 
