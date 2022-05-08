@@ -4,15 +4,16 @@ import { useAppDispatch, useAppSelector } from "../../hook";
 import cn from "classnames";
 
 // SHARED
-import { GameStatus } from "../../store/gameControlSlice";
+import { GameStatus } from "../../shared/types";
+
 import { onGridCellClick, updateGrid } from "../../store/gridSlice";
 
 const GridComponent: React.FC = () => {
   const dispatch = useAppDispatch();
 
   // SELECTORS
-  const rows = useAppSelector((state) => state.gridSize.rows);
-  const cols = useAppSelector((state) => state.gridSize.cols);
+  const cols = useAppSelector((state) => state.grid.cols);
+  const rows = useAppSelector((state) => state.grid.rows);
   const grid = useAppSelector((state) => state.grid.grid);
   const gameStatus = useAppSelector((state) => state.gameControl.gameStatus);
 
@@ -20,6 +21,7 @@ const GridComponent: React.FC = () => {
 
   // RERENDER CONTROL
   useEffect(() => {
+    // nice solution - got from https://devtrium.com/posts/set-interval-react
     let interval: ReturnType<typeof setTimeout>;
     if (gameIsActive) {
       interval = setInterval(() => {
@@ -38,10 +40,25 @@ const GridComponent: React.FC = () => {
 
   const startSimulation = (): void => {
     // update grid and counter state
-    dispatch(updateGrid({ grid, rows, cols }));
+    dispatch(updateGrid({ grid, cols, rows }));
   };
 
   return (
+    // <div className="gridpage__grid">
+    //   {grid.map((cols: number[], idx) => (
+    //     <div key={`${cols}-${idx}`} className="gridpage__grid__cols">
+    //       {cols.map((_, k: number) => {
+    //         return (
+    //           <div
+    //             onClick={() => onCellClick(idx, k)}
+    //             key={`${idx}-${k}`}
+    //             className={cn("cell", grid[idx][k] ? "filled" : null)}
+    //           />
+    //         );
+    //       })}
+    //     </div>
+    //   ))}
+    // </div>
     <div
       className="gridpage__grid"
       style={{

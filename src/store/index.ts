@@ -1,11 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import gridSizeReducer from "./gridSizeSlice";
 import gameControlReducer from "./gameControlSlice";
 import gridReducer from "./gridSlice";
 
 const store = configureStore({
   reducer: {
-    gridSize: gridSizeReducer,
     gameControl: gameControlReducer,
     grid: gridReducer,
   },

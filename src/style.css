@@ -27,10 +27,26 @@ h2 {
     padding: 0 10px;
 }
 
+.gridpage__gridsize {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.gridpage__gridsize>input {
+    max-width: 50px;
+    margin: 0 20px;
+}
 
 .gridpage__grid {
     max-width: fit-content;
     margin: 0 auto;
+    display: flex;
+}
+
+.gridpage__grid__cols {
+    display: flex;
+    flex-direction: column;
 }
 
 .cell {
@@ -130,4 +146,9 @@ button.random:hover {
 
 button.next:hover {
     background-color: #a9a7a7;
+}
+
+.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }

@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { CellUpdate, EmptyGrid, GridSize, UpdateGrid } from "../shared/types";
 import {
   createEmptyGridArr,
   createRandomGridArr,
@@ -6,35 +7,10 @@ import {
   increasePopulation,
 } from "../shared/utils";
 
-type EmptyGrid = {
-  grid: number[][];
-  rows: number;
-  cols: number;
-  generation: number;
-  population: number;
-};
-type UpdateGrid = {
-  grid: number[][];
-  x?: number;
-  y?: number;
-  rows: number;
-  cols: number;
-};
-type CellUpdate = {
-  grid: number[][];
-  x: number;
-  y: number;
-};
-
-type Grid = {
-  rows: number;
-  cols: number;
-};
-
 const initialState: EmptyGrid = {
-  grid: createEmptyGridArr(30, 30),
-  rows: 30,
+  grid: createEmptyGridArr({ cols: 30, rows: 30 }),
   cols: 30,
+  rows: 30,
   generation: 0,
   population: 0,
 };
@@ -43,31 +19,50 @@ const gridSlice = createSlice({
   name: "grid",
   initialState,
   reducers: {
-    createEmptyGrid(state, action: PayloadAction<Grid>) {
-      state.generation = 0;
-      state.population = 0;
-      state.grid = createEmptyGridArr(action.payload.cols, action.payload.rows);
-    },
-    createRandomGrid(state, action: PayloadAction<Grid>) {
-      state.generation = 0;
-      state.population = 0;
-      state.grid = createRandomGridArr(
-        action.payload.cols,
-        action.payload.rows
-      );
-    },
-    updateGrid(state, action: PayloadAction<UpdateGrid>) {
+    createEmptyGrid(state, action: PayloadAction<GridSize>) {
       const { payload } = action;
-      const { grid, cols = 30, rows = 30 } = payload;
+      const { cols, rows } = payload;
+
+      state.generation = 0;
+      state.population = 0;
+      state.grid = createEmptyGridArr({ cols, rows });
+      state.cols = action.payload.cols;
+      state.rows = action.payload.rows;
+    },
+    createRandomGrid(state, action: PayloadAction<GridSize>) {
+      const { payload } = action;
+      const { cols, rows } = payload;
+
+      state.generation = 0;
       state.population = 0;
 
-      let nextGrid = createEmptyGridArr(rows, cols);
+      const nextGrid = createRandomGridArr({ cols, rows });
+      state.grid = nextGrid;
+
+      const population = increasePopulation({
+        cols: payload.cols,
+        rows: payload.rows,
+        grid: nextGrid,
+      });
+      state.population = population;
+    },
+
+    updateGrid(state, action: PayloadAction<UpdateGrid>) {
+      const { payload } = action;
+      const { grid, cols, rows } = payload;
+
+      state.population = 0;
+
+      let nextGrid = createEmptyGridArr({ cols, rows });
 
       for (let x = 0; x < cols; x++) {
         for (let y = 0; y < rows; y++) {
           // search 3x3 from utils.ts
+
           let neighbours = findAliveNeighbours({ x, y, cols, rows, grid });
+
           let currentCell = grid[x][y];
+
           /*
           Game rules in action:
           */
@@ -84,7 +79,7 @@ const gridSlice = createSlice({
           }
         }
       }
-      const population = increasePopulation({ cols, rows, nextGrid });
+      const population = increasePopulation({ cols, rows, grid: nextGrid });
       state.population = population;
       state.grid = nextGrid;
       state.generation++;
@@ -96,6 +91,7 @@ const gridSlice = createSlice({
 
       // deep clone of actual grid
       const newGrid = grid.map((cols) => [...cols]);
+
       // cell toggle
       if (newGrid[x][y]) {
         newGrid[x][y] = 0;

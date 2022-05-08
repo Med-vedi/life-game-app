@@ -1,23 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-export enum GameStatus {
-  START = "START",
-  STOP = "STOP",
-}
-
-export enum GridMode {
-  RANDOM = "RANDOM",
-  CURRENT = "CURRENT",
-  EMPTY = "EMPTY",
-}
-
-type GameStatusStrings = keyof typeof GameStatus;
-type GridModeStrings = keyof typeof GridMode;
-
-type ControlsState = {
-  gameStatus: GameStatusStrings;
-  gridMode: GridModeStrings;
-};
+import { ControlsState } from "../shared/types";
 
 const initialState: ControlsState = {
   gameStatus: "STOP",

@@ -1,10 +1,8 @@
 import React from "react";
-import { BtnLabel } from "../../shared/types";
 import cn from "classnames";
-import { useAppDispatch, useAppSelector } from "../../hook";
+
+// REDUX
 import {
-  GameStatus,
-  GridMode,
   randomGrid,
   resetGrid,
   startGame,
@@ -16,15 +14,19 @@ import {
   updateGrid,
 } from "../../store/gridSlice";
 
+import { GameStatus, GridMode } from "../../shared/types";
+import { useAppDispatch, useAppSelector } from "../../hook";
+import { BtnLabel } from "../../shared/constants";
+
 const Footer: React.FC = () => {
   const dispatch = useAppDispatch();
 
   // SELECTORS
-  const rows = useAppSelector((state) => state.gridSize.rows);
-  const cols = useAppSelector((state) => state.gridSize.cols);
-  const grid = useAppSelector((state) => state.grid.grid);
-
+  const cols = useAppSelector((state) => state.grid.cols);
   const gameStatus = useAppSelector((state) => state.gameControl.gameStatus);
+  const grid = useAppSelector((state) => state.grid.grid);
+  const population = useAppSelector((state) => state.grid.population);
+  const rows = useAppSelector((state) => state.grid.rows);
 
   const gameIsActive = gameStatus === GameStatus.START;
 
@@ -40,20 +42,21 @@ const Footer: React.FC = () => {
   };
 
   const onRandomClick = () => {
-    dispatch(createRandomGrid({ rows: 30, cols: 30 }));
+    dispatch(createRandomGrid({ rows, cols }));
     dispatch(
       randomGrid({ gameStatus: GameStatus.STOP, gridMode: GridMode.RANDOM })
     );
   };
 
   const onResetClick = () => {
-    dispatch(createEmptyGrid({ rows: 30, cols: 30 }));
+    dispatch(createEmptyGrid({ rows, cols }));
     dispatch(
       resetGrid({ gameStatus: GameStatus.STOP, gridMode: GridMode.EMPTY })
     );
   };
+
   const onNextGenerationClick = () => {
-    dispatch(updateGrid({ grid, rows, cols }));
+    dispatch(updateGrid({ grid, cols, rows }));
   };
 
   return (
@@ -61,16 +64,22 @@ const Footer: React.FC = () => {
       <button className="reset" onClick={onResetClick}>
         {BtnLabel.RESET}
       </button>
+
       <button
-        className={cn(gameIsActive ? "stop" : "start")}
-        // disabled={population < 1 && !gridIsRandom}
+        className={cn(
+          gameIsActive ? "stop" : "start",
+          !population && !gameIsActive && "disabled"
+        )}
+        disabled={!population && !gameIsActive}
         onClick={onStartBtnClick}
       >
         {gameIsActive ? BtnLabel.STOP : BtnLabel.START}
       </button>
+
       <button className="random" onClick={onRandomClick}>
         {BtnLabel.RANDOM}
       </button>
+
       <button className="next" onClick={onNextGenerationClick}>
         {BtnLabel.NEXT_GENERATION}
       </button>

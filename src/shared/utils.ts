@@ -1,3 +1,5 @@
+import { GridSize } from "./types";
+
 interface FindNeighbours {
   x: number;
   y: number;
@@ -8,10 +10,10 @@ interface FindNeighbours {
 interface FindPopulation {
   cols: number;
   rows: number;
-  nextGrid: number[][];
+  grid: number[][];
 }
 
-export function createEmptyGridArr(rows: number, cols: number): number[][] {
+export function createEmptyGridArr({ cols, rows }: GridSize): number[][] {
   const arr = [];
   for (let i = 0; i < rows; i++) {
     arr[i] = new Array(rows);
@@ -21,7 +23,7 @@ export function createEmptyGridArr(rows: number, cols: number): number[][] {
   }
   return arr;
 }
-export function createRandomGridArr(rows: number, cols: number): number[][] {
+export function createRandomGridArr({ cols, rows }: GridSize): number[][] {
   const arr = [];
   for (let i = 0; i < rows; i++) {
     arr[i] = new Array(rows);
@@ -40,28 +42,28 @@ export const findAliveNeighbours = ({
   grid,
 }: FindNeighbours): number => {
   let sum = 0;
-
   for (let i = -1; i < 2; i++) {
     for (let j = -1; j < 2; j++) {
       // backmail the grid size limits
       let col = (x + i + cols) % cols;
       let row = (y + j + rows) % rows;
+
       sum += grid[col][row];
     }
   }
-
   sum -= grid[x][y];
   return sum;
 };
 export const increasePopulation = ({
   cols,
   rows,
-  nextGrid,
+  grid,
 }: FindPopulation): number => {
   let sum = 0;
-  for (let x = 0; x < cols; x++) {
-    for (let y = 0; y < rows; y++) {
-      let currentCell = nextGrid[x][y];
+
+  for (let x = 0; x < rows; x++) {
+    for (let y = 0; y < cols; y++) {
+      let currentCell = grid[x][y];
       if (currentCell) {
         sum++;
       }
