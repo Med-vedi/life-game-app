@@ -5,8 +5,13 @@ interface FindNeighbours {
   rows: number;
   grid: number[][];
 }
+interface FindPopulation {
+  cols: number;
+  rows: number;
+  nextGrid: number[][];
+}
 
-export function createEmptyGridArr(cols: number, rows: number): number[][] {
+export function createEmptyGridArr(rows: number, cols: number): number[][] {
   const arr = [];
   for (let i = 0; i < rows; i++) {
     arr[i] = new Array(rows);
@@ -46,5 +51,21 @@ export const findAliveNeighbours = ({
   }
 
   sum -= grid[x][y];
+  return sum;
+};
+export const increasePopulation = ({
+  cols,
+  rows,
+  nextGrid,
+}: FindPopulation): number => {
+  let sum = 0;
+  for (let x = 0; x < cols; x++) {
+    for (let y = 0; y < rows; y++) {
+      let currentCell = nextGrid[x][y];
+      if (currentCell) {
+        sum++;
+      }
+    }
+  }
   return sum;
 };

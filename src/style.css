@@ -102,6 +102,11 @@ button.random {
     border-color: #ffc107;
 }
 
+button.next {
+    color: #a9a7a7;
+    border-color: #a9a7a7;
+}
+
 /* on-hover */
 button:hover {
     color: #fff;
@@ -121,4 +126,8 @@ button.reset:hover {
 
 button.random:hover {
     background-color: #ffc107;
+}
+
+button.next:hover {
+    background-color: #a9a7a7;
 }

@@ -10,18 +10,23 @@ import {
   startGame,
   stopGame,
 } from "../../store/gameControlSlice";
-import { createEmptyGrid, createRandomGrid } from "../../store/gridSlice";
+import {
+  createEmptyGrid,
+  createRandomGrid,
+  updateGrid,
+} from "../../store/gridSlice";
 
 const Footer: React.FC = () => {
   const dispatch = useAppDispatch();
 
   // SELECTORS
-  const population = useAppSelector((state) => state.counter.population);
-  const gridMode = useAppSelector((state) => state.gameControl.gridMode);
+  const rows = useAppSelector((state) => state.gridSize.rows);
+  const cols = useAppSelector((state) => state.gridSize.cols);
+  const grid = useAppSelector((state) => state.grid.grid);
+
   const gameStatus = useAppSelector((state) => state.gameControl.gameStatus);
 
   const gameIsActive = gameStatus === GameStatus.START;
-  const gridIsRandom = gridMode === GridMode.RANDOM;
 
   const onStartBtnClick = () => {
     if (gameIsActive) {
@@ -47,6 +52,9 @@ const Footer: React.FC = () => {
       resetGrid({ gameStatus: GameStatus.STOP, gridMode: GridMode.EMPTY })
     );
   };
+  const onNextGenerationClick = () => {
+    dispatch(updateGrid({ grid, rows, cols }));
+  };
 
   return (
     <div className="gridpage__footer">
@@ -55,13 +63,16 @@ const Footer: React.FC = () => {
       </button>
       <button
         className={cn(gameIsActive ? "stop" : "start")}
-        disabled={population < 1 && !gridIsRandom}
+        // disabled={population < 1 && !gridIsRandom}
         onClick={onStartBtnClick}
       >
         {gameIsActive ? BtnLabel.STOP : BtnLabel.START}
       </button>
       <button className="random" onClick={onRandomClick}>
         {BtnLabel.RANDOM}
+      </button>
+      <button className="next" onClick={onNextGenerationClick}>
+        {BtnLabel.NEXT_GENERATION}
       </button>
     </div>
   );

@@ -1,11 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useAppSelector } from "../../hook";
 import { GridMode } from "../../store/gameControlSlice";
 
 const Header: React.FC = () => {
-  const generation = useAppSelector((state) => state.counter.generation);
-  const population = useAppSelector((state) => state.counter.population);
+  const generation = useAppSelector((state) => state.grid.generation);
+  const population = useAppSelector((state) => state.grid.population);
   const gridMode = useAppSelector((state) => state.gameControl.gridMode);
+
+  useEffect(() => {
+    if (population) {
+      console.log("=========================================");
+      console.log(`WE GOT: `, population);
+      console.log("=========================================");
+    }
+  }, [population]);
 
   const isRandomMode = gridMode === GridMode.RANDOM;
 
