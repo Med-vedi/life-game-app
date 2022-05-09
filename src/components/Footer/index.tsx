@@ -124,7 +124,7 @@ const Footer: React.FC = () => {
           {BtnLabel.NEXT_GENERATION}
         </button>
       </div>
-      <input type="file" name="" id="" onChange={onUploadFile} />
+      <input type="file" className="upload" onChange={onUploadFile} />
       <button className="download" onClick={onDownloadClick}>
         {BtnLabel.DOWNLOAD}
       </button>

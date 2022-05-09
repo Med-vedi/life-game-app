@@ -78,21 +78,20 @@ button {
     background: none;
     color: inherit;
     border: 1px solid black;
-    padding: 0;
+    border-radius: 3px;
+
     font: inherit;
     cursor: pointer;
     outline: inherit;
+    padding: 0 10px;
+    width: 220px;
+    height: 2em;
+    text-align: center;
+    margin: 10px;
 }
 
 input[type="file"] {
     margin: 10px 0;
-}
-
-button {
-    border: 2px solid black;
-    border-radius: 3px;
-    padding: 0 10px;
-    width: 220px;
 }
 
 .ok-btn {
@@ -108,12 +107,6 @@ button:active {
     transform: scale(0.99);
 }
 
-button {
-    height: 2em;
-    text-align: center;
-    margin: 10px;
-}
-
 button.start {
     color: #28a745;
     border-color: #28a745;
@@ -125,7 +118,8 @@ button.download {
     border-color: #343a40;
 }
 
-button.reset {
+button.reset,
+.upload {
     color: #dc3545;
     border-color: #dc3545;
 }
@@ -171,4 +165,49 @@ button.next:hover,
 .disabled {
     opacity: 0.5;
     cursor: not-allowed;
+}
+
+/* upload btn  */
+.upload {
+    color: transparent;
+
+}
+
+.upload::-webkit-file-upload-button {
+    visibility: hidden;
+}
+
+.upload::before {
+    content: 'UPLOAD';
+    color: red;
+    display: inline-block;
+    background: transparent;
+    border: 1px solid red;
+    border-radius: 3px;
+    padding: 5px 8px;
+    outline: none;
+    white-space: nowrap;
+    -webkit-user-select: none;
+    cursor: pointer;
+
+    height: 1em;
+    text-align: center;
+    margin: 1rem;
+    width: 200px;
+}
+
+.upload:hover::before {
+    color: #fff;
+    height: 1em;
+    border-color: #dc3545;
+    background-color: #dc3545;
+
+}
+
+.upload:active {
+    outline: 0;
+}
+
+.upload:active::before {
+    background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
 }
