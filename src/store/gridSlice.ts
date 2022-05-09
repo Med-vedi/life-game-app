@@ -1,16 +1,24 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { CellUpdate, EmptyGrid, GridSize, UpdateGrid } from "../shared/types";
+import {
+  CellUpdate,
+  EmptyGrid,
+  Generation,
+  GridSize,
+  UpdateGrid,
+  UploadGrid,
+} from "../shared/types";
 import {
   createEmptyGridArr,
   createRandomGridArr,
   findAliveNeighbours,
   increasePopulation,
+  parseUploadedGrid,
 } from "../shared/utils";
 
 const initialState: EmptyGrid = {
-  grid: createEmptyGridArr({ cols: 8, rows: 4 }),
-  cols: 8,
-  rows: 4,
+  grid: createEmptyGridArr({ cols: 10, rows: 10 }),
+  cols: 10,
+  rows: 10,
   generation: 0,
   population: 0,
 };
@@ -106,8 +114,33 @@ const gridSlice = createSlice({
       state.grid = newGrid;
     },
 
+    uploadGrid(state, action: PayloadAction<UploadGrid>) {
+      const { payload } = action;
+      const { grid } = payload;
+      const cols = grid[0].length;
+      const rows = grid.length;
+
+      // parse strings "*" and "." values to numbers
+      const newGrid = parseUploadedGrid({
+        grid,
+        cols,
+        rows,
+      });
+
+      // update the grid
+      const population = increasePopulation({ cols, rows, grid: newGrid });
+
+      state.rows = rows;
+      state.cols = cols;
+      state.grid = newGrid;
+      state.population = population;
+    },
+
     increaseGeneration(state) {
       state.generation += 1;
+    },
+    setGeneration(state, action: PayloadAction<Generation>) {
+      state.generation = action.payload.generation;
     },
   },
 });
@@ -118,6 +151,8 @@ export const {
   updateGrid,
   onGridCellClick,
   increaseGeneration,
+  uploadGrid,
+  setGeneration,
 } = gridSlice.actions;
 
 export default gridSlice.reducer;

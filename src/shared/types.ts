@@ -40,8 +40,14 @@ export type UpdateGrid = {
   rows: number;
   cols: number;
 };
+export type UploadGrid = {
+  grid: string[][];
+};
 export type CellUpdate = {
   grid: number[][];
   x: number;
   y: number;
+};
+export type Generation = {
+  generation: number;
 };

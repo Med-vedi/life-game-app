@@ -12,6 +12,11 @@ interface FindPopulation {
   rows: number;
   grid: number[][];
 }
+interface UploadedGrid {
+  cols: number;
+  rows: number;
+  grid: string[][] | number[][];
+}
 
 export function createEmptyGridArr({ cols, rows }: GridSize): number[][] {
   const arr = [];
@@ -29,6 +34,21 @@ export function createRandomGridArr({ cols, rows }: GridSize): number[][] {
     arr[i] = new Array(rows);
     for (let j = 0; j < cols; j++) {
       arr[i][j] = Math.random() < 0.5 ? 0 : 1;
+    }
+  }
+  return arr;
+}
+
+export function parseUploadedGrid({
+  grid,
+  cols,
+  rows,
+}: UploadedGrid): number[][] {
+  const arr = [];
+  for (let i = 0; i < rows; i++) {
+    arr[i] = new Array(rows);
+    for (let j = 0; j < cols; j++) {
+      arr[i][j] = grid[i][j] === "*" ? 1 : 0;
     }
   }
   return arr;

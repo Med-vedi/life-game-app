@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // REDUX
 import { createEmptyGrid } from "../../store/gridSlice";
@@ -17,6 +17,15 @@ const GridSize: React.FC = () => {
 
   const [width, setWidth] = useState<number>(cols);
   const [height, setHeight] = useState<number>(rows);
+
+  useEffect(() => {
+    if (cols) {
+      setWidth(cols);
+    }
+    if (rows) {
+      setHeight(rows);
+    }
+  }, [cols, rows]);
 
   const onWidthChange = (value: number) => {
     setWidth(value);

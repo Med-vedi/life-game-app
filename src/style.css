@@ -13,7 +13,7 @@ h2 {
 
 
 .gridpage__header,
-.gridpage__footer {
+.gridpage__footer-main {
     max-width: 500px;
     height: 80px;
     margin: 0 auto;
@@ -21,6 +21,13 @@ h2 {
     align-items: center;
     justify-content: space-between;
 
+}
+
+.gridpage__footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .gridpage__header {
@@ -63,10 +70,11 @@ h2 {
 }
 
 
+
+
 /* BUTTONS */
 
 button,
-input[type="submit"],
 input[type="reset"] {
     background: none;
     color: inherit;
@@ -82,7 +90,6 @@ button {
     border-radius: 3px;
     padding: 0 10px;
     width: 220px;
-
 }
 
 .ok-btn {
@@ -139,7 +146,8 @@ button.start:hover {
     background-color: #28a745;
 }
 
-button.stop:hover {
+button.stop:hover,
+button.upload:hover {
     background-color: #343a40;
 }
 

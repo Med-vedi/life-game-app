@@ -11,7 +11,9 @@ import {
 import {
   createEmptyGrid,
   createRandomGrid,
+  setGeneration,
   updateGrid,
+  uploadGrid,
 } from "../../store/gridSlice";
 
 import { GameStatus, GridMode } from "../../shared/types";
@@ -59,30 +61,63 @@ const Footer: React.FC = () => {
     dispatch(updateGrid({ grid, cols, rows }));
   };
 
+  const onUploadFile = (e: any) => {
+    e.preventDefault();
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      if (!e.target) {
+        return;
+      }
+      const text = e.target.result;
+
+      if (typeof text !== "string") {
+        return;
+      }
+
+      const parsedToArr = text.split("\n");
+      const arrayClone = parsedToArr.map((rows) => rows);
+      const splitedArr = arrayClone.map((rows) => rows.split(""));
+      const headerInfo = arrayClone.splice(0, 2);
+
+      let generation = 0;
+      if (headerInfo[0]) {
+        let parsedGen = headerInfo[0].match(/\d/g)?.join("") || 0;
+        generation = +parsedGen ? +parsedGen : 0;
+      }
+      dispatch(uploadGrid({ grid: splitedArr }));
+      dispatch(setGeneration({ generation }));
+    };
+    reader.readAsText(e.target.files[0]);
+  };
+
   return (
     <div className="gridpage__footer">
-      <button className="reset" onClick={onResetClick}>
-        {BtnLabel.RESET}
-      </button>
+      <div className="gridpage__footer-main">
+        <button className="reset" onClick={onResetClick}>
+          {BtnLabel.RESET}
+        </button>
 
-      <button
-        className={cn(
-          gameIsActive ? "stop" : "start",
-          !population && !gameIsActive && "disabled"
-        )}
-        disabled={!population && !gameIsActive}
-        onClick={onStartBtnClick}
-      >
-        {gameIsActive ? BtnLabel.STOP : BtnLabel.START}
-      </button>
+        <button
+          className={cn(
+            gameIsActive ? "stop" : "start",
+            !population && !gameIsActive && "disabled"
+          )}
+          disabled={!population && !gameIsActive}
+          onClick={onStartBtnClick}
+        >
+          {gameIsActive ? BtnLabel.STOP : BtnLabel.START}
+        </button>
 
-      <button className="random" onClick={onRandomClick}>
-        {BtnLabel.RANDOM}
-      </button>
+        <button className="random" onClick={onRandomClick}>
+          {BtnLabel.RANDOM}
+        </button>
 
-      <button className="next" onClick={onNextGenerationClick}>
-        {BtnLabel.NEXT_GENERATION}
-      </button>
+        <button className="next" onClick={onNextGenerationClick}>
+          {BtnLabel.NEXT_GENERATION}
+        </button>
+      </div>
+      <input type="file" name="" id="" onChange={onUploadFile} />
     </div>
   );
 };

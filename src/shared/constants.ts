@@ -5,4 +5,5 @@ export enum BtnLabel {
   RANDOM = "RANDOM",
   NEXT_GENERATION = "+1 STEP",
   OK = "OK",
+  UPLOAD = "UPLOAD",
 }
