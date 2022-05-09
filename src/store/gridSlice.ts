@@ -16,9 +16,9 @@ import {
 } from "../shared/utils";
 
 const initialState: EmptyGrid = {
-  grid: createEmptyGridArr({ cols: 10, rows: 10 }),
-  cols: 10,
-  rows: 10,
+  grid: createEmptyGridArr({ cols: 20, rows: 20 }),
+  cols: 20,
+  rows: 20,
   generation: 0,
   population: 0,
 };
@@ -116,7 +116,7 @@ const gridSlice = createSlice({
 
     uploadGrid(state, action: PayloadAction<UploadGrid>) {
       const { payload } = action;
-      const { grid } = payload;
+      const { grid, generation } = payload;
       const cols = grid[0].length;
       const rows = grid.length;
 
@@ -129,11 +129,11 @@ const gridSlice = createSlice({
 
       // update the grid
       const population = increasePopulation({ cols, rows, grid: newGrid });
-
       state.rows = rows;
       state.cols = cols;
       state.grid = newGrid;
       state.population = population;
+      state.generation = generation;
     },
 
     increaseGeneration(state) {

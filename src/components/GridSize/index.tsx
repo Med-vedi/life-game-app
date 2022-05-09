@@ -37,7 +37,7 @@ const GridSize: React.FC = () => {
 
   const onConfirmClick = () => {
     if (height > width) {
-      // TOFIX: temporary blocked
+      // TOFIX: temporary solution
       setWidth(height);
       return setHeight(width);
     }

@@ -11,7 +11,15 @@ h2 {
     margin: 0;
 }
 
+a,
+a:hover,
+a:focus,
+a:active {
+    text-decoration: underline;
+    color: inherit;
+}
 
+/* GRID */
 .gridpage__header,
 .gridpage__footer-main {
     max-width: 500px;
@@ -69,11 +77,7 @@ h2 {
     background-color: #28a745;
 }
 
-
-
-
 /* BUTTONS */
-
 button {
     background: none;
     color: inherit;

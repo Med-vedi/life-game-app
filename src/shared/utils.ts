@@ -1,26 +1,15 @@
-import { DownloadText, GridSize } from "./types";
+import {
+  FindNeighbours,
+  FindPopulation,
+  GridSize,
+  UploadedGrid,
+  UploadGrid,
+} from "./types";
 import { saveAs } from "file-saver";
-
-interface FindNeighbours {
-  rowIdx: number;
-  colIdx: number;
-  cols: number;
-  rows: number;
-  grid: number[][];
-}
-interface FindPopulation {
-  cols: number;
-  rows: number;
-  grid: number[][];
-}
-interface UploadedGrid {
-  cols: number;
-  rows: number;
-  grid: string[][] | number[][];
-}
 
 export function createEmptyGridArr({ cols, rows }: GridSize): number[][] {
   const arr = [];
+  // iter to set 0 value to all cells
   for (let i = 0; i < rows; i++) {
     arr[i] = new Array(rows);
     for (let j = 0; j < cols; j++) {
@@ -31,6 +20,7 @@ export function createEmptyGridArr({ cols, rows }: GridSize): number[][] {
 }
 export function createRandomGridArr({ cols, rows }: GridSize): number[][] {
   const arr = [];
+  // iter to set random value to all cells
   for (let i = 0; i < rows; i++) {
     arr[i] = new Array(rows);
     for (let j = 0; j < cols; j++) {
@@ -46,6 +36,10 @@ export function parseUploadedGrid({
   rows,
 }: UploadedGrid): number[][] {
   const arr = [];
+  // iter to set number value to strings
+  // * === 1
+  // . === 0
+
   for (let i = 0; i < rows; i++) {
     arr[i] = new Array(rows);
     for (let j = 0; j < cols; j++) {
@@ -63,9 +57,10 @@ export const findAliveNeighbours = ({
   grid,
 }: FindNeighbours): number => {
   let sum = 0;
+  // iter 3x3 to get alive neighbours
   for (let i = -1; i < 2; i++) {
     for (let j = -1; j < 2; j++) {
-      // backmail the grid size limits
+      // backmailing the grid size limits
       let row = (rowIdx + i + rows) % rows;
       let col = (colIdx + j + cols) % cols;
 
@@ -81,7 +76,7 @@ export const increasePopulation = ({
   grid,
 }: FindPopulation): number => {
   let sum = 0;
-
+  // calculation of population
   for (let x = 0; x < rows; x++) {
     for (let y = 0; y < cols; y++) {
       let currentCell = grid[x][y];
@@ -93,10 +88,11 @@ export const increasePopulation = ({
   return sum;
 };
 
-export const exportFile = ({ grid, generation }: any): any => {
+export const exportFile = ({ grid, generation }: UploadGrid): void => {
   const arr = [];
   const cols = grid[0].length;
   const rows = grid.length;
+  // transform grid with numeric cells to strings and wrap all data to the text file
   let strResult = `Generation ${generation}:\n${rows} ${cols}\n`;
 
   for (let i = 0; i < grid.length; i++) {
@@ -110,5 +106,5 @@ export const exportFile = ({ grid, generation }: any): any => {
     strResult += `${arr[k].join("")}\n`;
   }
   const blob = new Blob([strResult], { type: "text/plain;charset=utf-8" });
-  saveAs(blob, `generation${generation}.txt`);
+  return saveAs(blob, `generation${generation}.txt`);
 };

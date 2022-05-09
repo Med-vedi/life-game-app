@@ -1,3 +1,21 @@
+export interface FindNeighbours {
+  rowIdx: number;
+  colIdx: number;
+  cols: number;
+  rows: number;
+  grid: number[][];
+}
+export interface FindPopulation {
+  cols: number;
+  rows: number;
+  grid: number[][];
+}
+export interface UploadedGrid {
+  cols: number;
+  rows: number;
+  grid: string[][] | number[][];
+}
+
 // GAME CONTROL
 export enum GameStatus {
   START = "START",
@@ -41,7 +59,8 @@ export type UpdateGrid = {
   cols: number;
 };
 export type UploadGrid = {
-  grid: string[][];
+  grid: string[][] | number[][];
+  generation: number;
 };
 export type CellUpdate = {
   grid: number[][];
