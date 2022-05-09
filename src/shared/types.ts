@@ -51,3 +51,8 @@ export type CellUpdate = {
 export type Generation = {
   generation: number;
 };
+
+export type DownloadText = {
+  grid: number[][] | string[][];
+  generation: number;
+};

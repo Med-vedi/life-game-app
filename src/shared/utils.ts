@@ -1,4 +1,5 @@
-import { GridSize } from "./types";
+import { DownloadText, GridSize } from "./types";
+import { saveAs } from "file-saver";
 
 interface FindNeighbours {
   rowIdx: number;
@@ -90,4 +91,24 @@ export const increasePopulation = ({
     }
   }
   return sum;
+};
+
+export const exportFile = ({ grid, generation }: any): any => {
+  const arr = [];
+  const cols = grid[0].length;
+  const rows = grid.length;
+  let strResult = `Generation ${generation}:\n${rows} ${cols}\n`;
+
+  for (let i = 0; i < grid.length; i++) {
+    arr[i] = new Array(grid.length);
+    for (let j = 0; j < grid[0].length; j++) {
+      arr[i][j] = grid[i][j] ? "*" : ".";
+    }
+  }
+
+  for (let k = 0; k < arr.length; k++) {
+    strResult += `${arr[k].join("")}\n`;
+  }
+  const blob = new Blob([strResult], { type: "text/plain;charset=utf-8" });
+  saveAs(blob, `generation${generation}.txt`);
 };

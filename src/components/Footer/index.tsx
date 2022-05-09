@@ -19,6 +19,7 @@ import {
 import { GameStatus, GridMode } from "../../shared/types";
 import { useAppDispatch, useAppSelector } from "../../hook";
 import { BtnLabel } from "../../shared/constants";
+import { exportFile } from "../../shared/utils";
 
 const Footer: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -26,6 +27,7 @@ const Footer: React.FC = () => {
   // SELECTORS
   const cols = useAppSelector((state) => state.grid.cols);
   const gameStatus = useAppSelector((state) => state.gameControl.gameStatus);
+  const generation = useAppSelector((state) => state.grid.generation);
   const grid = useAppSelector((state) => state.grid.grid);
   const population = useAppSelector((state) => state.grid.population);
   const rows = useAppSelector((state) => state.grid.rows);
@@ -63,8 +65,8 @@ const Footer: React.FC = () => {
 
   const onUploadFile = (e: any) => {
     e.preventDefault();
-
     const reader = new FileReader();
+
     reader.onload = (e) => {
       if (!e.target) {
         return;
@@ -88,7 +90,12 @@ const Footer: React.FC = () => {
       dispatch(uploadGrid({ grid: splitedArr }));
       dispatch(setGeneration({ generation }));
     };
-    reader.readAsText(e.target.files[0]);
+
+    e.target.files && reader.readAsText(e.target.files[0]);
+  };
+
+  const onDownloadClick = () => {
+    exportFile({ grid, generation });
   };
 
   return (
@@ -118,6 +125,9 @@ const Footer: React.FC = () => {
         </button>
       </div>
       <input type="file" name="" id="" onChange={onUploadFile} />
+      <button className="download" onClick={onDownloadClick}>
+        {BtnLabel.DOWNLOAD}
+      </button>
     </div>
   );
 };
